@@ -1,0 +1,125 @@
+/* WhetherApp.Js */
+
+
+import React, {useRef, useState } from 'react'
+
+
+function WhetherApp() {
+
+  const [whetherSreport,setWhetherSreport] = useState( false)
+  const inputCityRef = useRef()
+
+  const whetherReport = async(city)=>{
+    
+    try {
+
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metrics&appid=40a1fb49d2fb4b308b37e96b51c923d4` ;
+      const res = await fetch(url)
+      const data = await res.json()
+      console.log(data)
+
+      setWhetherSreport({
+        location: data.name,
+        temperature: Math.floor(data.main.temp),
+        humidity: data.main.humidity,
+        
+      })
+    } catch (error) {
+      setWhetherSreport(false)  
+    }
+  }
+
+
+  // useEffect(()=>{
+  //   // whetherReport("Hyderabad")
+  // },[])
+  return (
+    <div>
+
+        <div className="card">
+           <h2>Whether Temperature Check ⛅</h2>
+            
+            <div>
+              <input type="search" name="search" placeholder='Enter Your City' ref={inputCityRef} /> &nbsp;
+              <button type="search" onClick={()=>whetherReport(inputCityRef.current.value)}>Search
+              <i class="fa-solid fa-magnifying-glass fa-1x"></i>
+              </button>
+            </div>
+
+            {whetherReport? <> 
+            <div>
+            <h2>Location 🗺️:</h2>
+              <h3>{whetherSreport.location}</h3>
+           </div>
+           <div>
+            <h2>Temperature ℃:</h2>
+              <h3>{whetherSreport.temperature}</h3>
+           </div>
+           <div>
+            <h2>Humidity ❄️:</h2>
+              <h3>{whetherSreport.humidity} </h3>
+           </div>
+            </>:
+            
+              <>
+              <div>
+                <h2>Location</h2>
+              </div>
+
+              <div>
+              <h2>Temperature</h2>
+              </div>
+              <div>
+              <h2>Humidity</h2>
+              </div>
+
+             </>}
+           
+        </div>
+          
+    </div>
+  )
+}
+
+export default WhetherApp
+
+
+
+
+
+
+/*  App.css  */
+
+.App {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+.card{
+  height: 500px; width: 500px;
+  border: 1px solid black;
+  background: rgb(102, 207, 207);
+}
+
+input{
+  font-size: large;
+  outline: none;
+  padding: 5px;
+  text-indent: 13px;
+}
+
+i{
+  font-size: large;
+}
+h3{
+  background: lightcyan;
+  padding: 5px;
+}
+
+button{
+  font-size: 24px;
+}
+
